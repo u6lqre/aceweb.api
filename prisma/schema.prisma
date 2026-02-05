@@ -6,3 +6,10 @@ generator client {
 datasource db {
   provider = "sqlite"
 }
+
+model User {
+  id Int @id @default(autoincrement())
+  name String @unique
+  password String
+  isAccepted Boolean @default(false)
+}
