@@ -9,14 +9,14 @@ type AuthBody = {
 class AuthController {
   public async register(req: Request<{}, {}, AuthBody>, res: Response) {
     try {
-      const { name, password } = req.body;
+      const { name: username, password } = req.body;
 
-      const userExists = await AuthService.checkIfUserExists(name);
+      const userExists = await AuthService.checkIfUserExists(username);
       if (userExists) throw new Error("User already exist");
 
       const hashedPassword = await AuthService.hashPassword(password);
 
-      await AuthService.addUserToDB(name, hashedPassword);
+      await AuthService.addUserToDB(username, hashedPassword);
 
       res.status(201).json({
         success: true,

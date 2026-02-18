@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-export const registerSchema = z.object({
-  name: z
+export const onboardingSchema = z.object({
+  username: z
     .string()
     .trim()
     .toLowerCase()

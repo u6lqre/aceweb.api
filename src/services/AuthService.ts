@@ -2,9 +2,9 @@ import { prisma } from "@/lib/prisma";
 import * as bcrypt from "bcrypt";
 
 class AuthService {
-  public async checkIfUserExists(name: string): Promise<boolean> {
+  public async checkIfUserExists(username: string): Promise<boolean> {
     const user = await prisma.user.findUnique({
-      where: { name },
+      where: { username },
     });
 
     return Boolean(user);
@@ -14,10 +14,10 @@ class AuthService {
     return await bcrypt.hash(password, 10);
   }
 
-  public async addUserToDB(name: string, password: string): Promise<void> {
+  public async addUserToDB(username: string, password: string): Promise<void> {
     await prisma.user.create({
       data: {
-        name,
+        username,
         password,
       },
     });
