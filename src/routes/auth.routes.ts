@@ -1,8 +1,12 @@
 import AuthController from "@/controllers/AuthController";
 import { validate } from "@/middlewares/validate";
-import { registerSchema } from "@/schemas/auth.schema";
+import { onboardingSchema } from "@/schemas/auth.schema";
 import { Router } from "express";
 
 export const authRouter = Router();
 
-authRouter.post("/register", validate(registerSchema), AuthController.register);
+authRouter.post(
+  "/onboarding",
+  validate(onboardingSchema),
+  AuthController.onboarding,
+);

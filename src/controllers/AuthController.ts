@@ -2,26 +2,34 @@ import AuthService from "@/services/AuthService";
 import { Request, Response } from "express";
 
 type AuthBody = {
-  name: string;
+  username: string;
   password: string;
 };
 
 class AuthController {
-  public async register(req: Request<{}, {}, AuthBody>, res: Response) {
+  public async onboarding(req: Request<{}, {}, AuthBody>, res: Response) {
     try {
-      const { name: username, password } = req.body;
+      const { username, password } = req.body;
+      const user = await AuthService.getUserBy(username);
 
-      const userExists = await AuthService.checkIfUserExists(username);
-      if (userExists) throw new Error("User already exist");
+      if (user) {
+        res.status(200).json({
+          success: true,
+          data: {
+            isAccepted: user.isAccepted,
+            message: `User request is ${user.isAccepted ? "accepted" : "pending"}`,
+          },
+        });
+      } else {
+        await AuthService.createUser(username, password);
 
-      const hashedPassword = await AuthService.hashPassword(password);
-
-      await AuthService.addUserToDB(username, hashedPassword);
-
-      res.status(201).json({
-        success: true,
-        message: "User created successfully",
-      });
+        res.status(201).json({
+          success: true,
+          data: {
+            message: "User created successfully",
+          },
+        });
+      }
     } catch (error) {
       res.status(400).json({
         success: false,
