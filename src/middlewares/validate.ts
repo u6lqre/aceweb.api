@@ -1,3 +1,4 @@
+import { fail } from "@/utils/httpResponse";
 import { Request, Response, NextFunction } from "express";
 import z, { ZodObject } from "zod";
 
@@ -7,7 +8,7 @@ export const validate =
 
     if (!result.success) {
       const errorMessage = z.prettifyError(result.error);
-      return res.status(400).json({ success: false, error: errorMessage });
+      return fail(res, errorMessage, "validation_error");
     }
 
     req.body = result.data;

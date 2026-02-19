@@ -1,5 +1,7 @@
 import AuthService from "@/services/AuthService";
+import { fail, success } from "@/utils/httpResponse";
 import { Request, Response } from "express";
+import { boolean } from "zod";
 
 type AuthBody = {
   username: string;
@@ -13,28 +15,17 @@ class AuthController {
       const user = await AuthService.getUserBy(username);
 
       if (user) {
-        res.status(200).json({
-          success: true,
-          data: {
-            isAccepted: user.isAccepted,
-            message: `User request is ${user.isAccepted ? "accepted" : "pending"}`,
-          },
-        });
-      } else {
-        await AuthService.createUser(username, password);
-
-        res.status(201).json({
-          success: true,
-          data: {
-            message: "User created successfully",
-          },
+        return success(res, {
+          object: "user_request_status",
+          id: user.id,
+          isAccepted: boolean,
         });
       }
+
+      await AuthService.createUser(username, password);
+      return success(res, { object: "new_user" }, 201);
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        error: { name: "App Error", message: `${(error as Error).message}` },
-      });
+      return fail(res, `${(error as Error).message}`);
     }
   }
 }
