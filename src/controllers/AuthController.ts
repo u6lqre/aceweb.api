@@ -18,7 +18,7 @@ class AuthController {
         return success(res, {
           object: "user_request_status",
           id: user.id,
-          isAccepted: boolean,
+          isAccepted: user.isAccepted,
         });
       }
 
