@@ -1,7 +1,6 @@
 import AuthService from "@/services/AuthService";
 import { fail, success } from "@/utils/httpResponse";
 import { Request, Response } from "express";
-import { boolean } from "zod";
 
 type AuthBody = {
   username: string;
@@ -25,7 +24,10 @@ class AuthController {
       await AuthService.createUser(username, password);
       return success(res, { object: "new_user" }, 201);
     } catch (error) {
-      return fail(res, `${(error as Error).message}`);
+      return fail(res, {
+        type: "auth_error",
+        message: `${error as Error}.message`,
+      });
     }
   }
 }

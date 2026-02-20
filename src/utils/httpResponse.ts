@@ -5,10 +5,14 @@ type SuccessResponse<T> = {
 };
 
 type FailResponse = {
-  error: {
-    type: number;
-    message: string;
-  };
+  error: FailOptions;
+};
+
+type FailOptions = {
+  message: string;
+  type?: string;
+  statusCode?: number;
+  object?: unknown;
 };
 
 export function success<T>(
@@ -21,14 +25,13 @@ export function success<T>(
 
 export function fail(
   res: Response,
-  message: string,
-  type = "app_error",
-  statusCode = 400,
+  { message, type = "app_error", statusCode = 400, object }: FailOptions,
 ): Response<FailResponse> {
   return res.status(statusCode).json({
     error: {
       type,
       message,
+      object,
     },
   });
 }

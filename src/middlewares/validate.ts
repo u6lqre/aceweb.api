@@ -1,5 +1,5 @@
 import { fail } from "@/utils/httpResponse";
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import z, { ZodObject } from "zod";
 
 export const validate =
@@ -7,8 +7,12 @@ export const validate =
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      const errorMessage = z.prettifyError(result.error);
-      return fail(res, errorMessage, "validation_error");
+      const errorObject = z.flattenError(result.error);
+      return fail(res, {
+        message: "Zod error",
+        type: "validation_error",
+        object: errorObject,
+      });
     }
 
     req.body = result.data;
