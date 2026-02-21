@@ -15,7 +15,11 @@ class AuthService {
   }
 
   private async hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, 10);
+    return await bcrypt.hash(password, 10);
+  }
+
+  public async checkPassword(password: string, user: User) {
+    return await bcrypt.compare(password, user.password);
   }
 
   private async addUserToDB(username: string, password: string): Promise<void> {

@@ -13,20 +13,30 @@ class AuthController {
       const { username, password } = req.body;
       const user = await AuthService.getUserBy(username);
 
-      if (user) {
-        return success(res, {
-          object: "user_request_status",
-          id: user.id,
-          isAccepted: user.isAccepted,
+      if (!user) {
+        await AuthService.createUser(username, password);
+        return success(res, { type: "new_user" }, 201);
+      }
+
+      const isPasswordCorrect = await AuthService.checkPassword(password, user);
+
+      if (!isPasswordCorrect) {
+        return fail(res, {
+          type: "auth_error",
+          message: "Incorrect password",
+          statusCode: 401,
         });
       }
 
-      await AuthService.createUser(username, password);
-      return success(res, { object: "new_user" }, 201);
+      return success(res, {
+        object: "user_request_status",
+        id: user.id,
+        isAccepted: user.isAccepted,
+      });
     } catch (error) {
       return fail(res, {
         type: "auth_error",
-        message: `${error as Error}.message`,
+        message: (error as Error).message,
       });
     }
   }
