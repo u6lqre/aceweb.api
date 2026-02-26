@@ -29,8 +29,8 @@ class AuthController {
       }
 
       return success(res, {
-        object: "user_request_status",
-        id: user.id,
+        type: "user_request_status",
+        userId: user.id,
         isAccepted: user.isAccepted,
       });
     } catch (error) {
