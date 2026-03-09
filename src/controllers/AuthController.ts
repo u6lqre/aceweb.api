@@ -28,10 +28,15 @@ class AuthController {
         });
       }
 
+      const token = user.isAccepted
+        ? await AuthService.generateToken(user.id)
+        : null;
+
       return success(res, {
         type: "user_request_status",
         userId: user.id,
         isAccepted: user.isAccepted,
+        token,
       });
     } catch (error) {
       return fail(res, {

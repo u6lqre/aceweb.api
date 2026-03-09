@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import * as bcrypt from "bcrypt";
+import "dotenv/config";
 import { User } from "generated/prisma/client";
+import jwt from "jsonwebtoken";
 
 class AuthService {
   public async getUserBy(username: string): Promise<User | null> {
@@ -28,6 +30,12 @@ class AuthService {
         username,
         password,
       },
+    });
+  }
+
+  public async generateToken(userId: number) {
+    return jwt.sign({ userId }, `${process.env.JWT_SECRET}`, {
+      expiresIn: "7d",
     });
   }
 }
