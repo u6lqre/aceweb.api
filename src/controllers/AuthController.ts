@@ -11,7 +11,7 @@ class AuthController {
   public async onboarding(req: Request<{}, {}, AuthBody>, res: Response) {
     try {
       const { username, password } = req.body;
-      const user = await AuthService.getUserBy(username);
+      const user = await AuthService.getUserByUsername(username);
 
       if (!user) {
         await AuthService.createUser(username, password);

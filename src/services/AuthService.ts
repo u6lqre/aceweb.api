@@ -5,9 +5,15 @@ import { User } from "generated/prisma/client";
 import jwt from "jsonwebtoken";
 
 class AuthService {
-  public async getUserBy(username: string): Promise<User | null> {
+  public async getUserByUsername(username: string): Promise<User | null> {
     return prisma.user.findUnique({
       where: { username },
+    });
+  }
+
+  public async getUserById(id: number): Promise<User | null> {
+    return prisma.user.findUnique({
+      where: { id },
     });
   }
 
