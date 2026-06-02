@@ -1,7 +1,7 @@
+import { User } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import * as bcrypt from "bcrypt";
 import "dotenv/config";
-import { User } from "generated/prisma/client";
 import jwt from "jsonwebtoken";
 
 class AuthService {
