@@ -19,7 +19,15 @@ model Channel {
   id Int @id @default(autoincrement())
   name String
   link String
-  imageUrl String
+  provider Provider @default(default)
   userId Int
+
   user User @relation(fields: [userId], references: [id])
+}
+
+enum Provider {
+  default
+  dazn
+  movistar
+  eurosport
 }
