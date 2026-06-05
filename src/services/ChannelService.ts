@@ -2,7 +2,7 @@ import { Channel, Provider } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
 class ChannelService {
-  public async findByUserIdAndLink(
+  public findByUserIdAndLink(
     userId: number,
     link: string,
   ): Promise<Channel | null> {
@@ -11,7 +11,7 @@ class ChannelService {
     });
   }
 
-  public async create(data: {
+  public create(data: {
     name: string;
     link: string;
     provider: Provider;
@@ -20,6 +20,10 @@ class ChannelService {
     return prisma.channel.create({
       data,
     });
+  }
+
+  public findChannelsByUserId(userId: number) {
+    return prisma.channel.findMany({ where: { userId } });
   }
 }
 

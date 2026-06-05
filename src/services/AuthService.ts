@@ -5,13 +5,13 @@ import "dotenv/config";
 import jwt from "jsonwebtoken";
 
 class AuthService {
-  public async getUserByUsername(username: string): Promise<User | null> {
+  public getUserByUsername(username: string): Promise<User | null> {
     return prisma.user.findUnique({
       where: { username },
     });
   }
 
-  public async getUserById(id: number): Promise<User | null> {
+  public getUserById(id: number): Promise<User | null> {
     return prisma.user.findUnique({
       where: { id },
     });
@@ -22,12 +22,12 @@ class AuthService {
     await this.addUserToDB(username, hashedPassword);
   }
 
-  private async hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, 10);
+  private hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, 10);
   }
 
-  public async checkPassword(password: string, user: User) {
-    return await bcrypt.compare(password, user.password);
+  public checkPassword(password: string, user: User) {
+    return bcrypt.compare(password, user.password);
   }
 
   private async addUserToDB(username: string, password: string): Promise<void> {
@@ -39,8 +39,8 @@ class AuthService {
     });
   }
 
-  public async generateToken(userId: number) {
-    return jwt.sign({ userId }, `${process.env.JWT_SECRET}`, {
+  public generateToken(userId: number) {
+    return jwt.sign({ userId }, process.env.JWT_SECRET as string, {
       expiresIn: "7d",
     });
   }
