@@ -12,3 +12,5 @@ channelRouter.post(
   validate(channelSchema),
   ChannelController.create,
 );
+
+channelRouter.get("/channels", authorize, ChannelController.getUserChannels);

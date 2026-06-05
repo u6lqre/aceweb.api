@@ -50,8 +50,27 @@ class ChannelController {
     }
   };
 
+  public getUserChannels = async (req: Request, res: Response) => {
+    try {
+      const channels: Channel[] = await ChannelService.findChannelsByUserId(
+        req.user.id,
+      );
+      if (!channels) {
+        return ResponseHandler.fail(res, { message: "", type: "" });
+      }
+
+      return ResponseHandler.success(res, {
+        channels,
+      });
+    } catch (error) {
+      return ResponseHandler.fail(res, {
+        message: "",
+        type: "",
+      });
+    }
+  };
+
   private toChannelDTO(channel: Channel) {
-    console.log(channel);
     return {
       name: channel.name,
       link: channel.link,
