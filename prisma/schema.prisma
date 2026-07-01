@@ -18,7 +18,7 @@ model User {
 model Channel {
   id Int @id @default(autoincrement())
   name String
-  link String
+  infohash String
   provider Provider @default(default)
   userId Int
 
@@ -30,4 +30,10 @@ enum Provider {
   dazn
   movistar
   eurosport
+}
+
+model Stream {
+  infohash String @id
+  pid Int @unique
+  viewers Int @default(0)
 }
