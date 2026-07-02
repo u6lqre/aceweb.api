@@ -52,20 +52,16 @@ class ChannelController {
 
   public getUserChannels = async (req: Request, res: Response) => {
     try {
-      const channels: Channel[] = await ChannelService.findChannelsByUserId(
-        req.user.id,
-      );
-      if (!channels) {
-        return ResponseHandler.fail(res, { message: "", type: "" });
-      }
+      const channels = await ChannelService.findChannelsByUserId(req.user.id);
 
       return ResponseHandler.success(res, {
         channels,
       });
     } catch (error) {
       return ResponseHandler.fail(res, {
-        message: "",
-        type: "",
+        message: "channel_fetch_error",
+        type: (error as Error).message,
+        statusCode: 500,
       });
     }
   };
