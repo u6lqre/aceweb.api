@@ -2,18 +2,18 @@ import { Channel, Provider } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
 class ChannelService {
-  public findByUserIdAndLink(
+  public findByUserIdAndInfohash(
     userId: number,
-    link: string,
+    infohash: string,
   ): Promise<Channel | null> {
     return prisma.channel.findFirst({
-      where: { userId, link },
+      where: { userId, infohash },
     });
   }
 
   public create(data: {
     name: string;
-    link: string;
+    infohash: string;
     provider: Provider;
     userId: number;
   }) {

@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 
 type Body = {
   name: string;
-  link: string;
+  infohash: string;
   provider: Provider;
 };
 
@@ -14,12 +14,12 @@ class ChannelController {
   // arrow fn to keep "this" context
   public create = async (req: Request<{}, {}, Body>, res: Response) => {
     try {
-      const { name, link, provider } = req.body;
+      const { name, infohash, provider } = req.body;
       const userId = req.user.id;
 
-      const existingChannel = await ChannelService.findByUserIdAndLink(
+      const existingChannel = await ChannelService.findByUserIdAndInfohash(
         userId,
-        link,
+        infohash,
       );
       if (existingChannel) {
         return ResponseHandler.fail(res, {
@@ -31,7 +31,7 @@ class ChannelController {
 
       const channel = await ChannelService.create({
         name,
-        link,
+        infohash,
         provider,
         userId,
       });
@@ -73,7 +73,7 @@ class ChannelController {
   private toChannelDTO(channel: Channel) {
     return {
       name: channel.name,
-      link: channel.link,
+      infohash: channel.infohash,
       provider: channel.provider,
     };
   }

@@ -8,7 +8,7 @@ export const channelSchema = z.object({
     .toLowerCase()
     .min(3, "Channel must have at least 3 characters")
     .max(20, "Channel must have less than 20 characters"),
-  link: z
+  infohash: z
     .string()
     .trim()
     .toLowerCase()
